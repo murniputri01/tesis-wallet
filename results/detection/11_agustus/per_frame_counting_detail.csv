@@ -1,0 +1,8 @@
+filename,group_id,gt_count,pred_count_A,pred_count_B,err_A,err_B,abs_err_A,abs_err_B,sq_err_A,sq_err_B
+11_agustus_frame_000001.jpg,11_agustus,93,163,142,70,49,70,49,4900,2401
+11_agustus_frame_000005.jpg,11_agustus,88,166,143,78,55,78,55,6084,3025
+11_agustus_frame_000009.jpg,11_agustus,83,161,143,78,60,78,60,6084,3600
+11_agustus_frame_000013.jpg,11_agustus,85,158,155,73,70,73,70,5329,4900
+11_agustus_frame_000017.jpg,11_agustus,92,163,140,71,48,71,48,5041,2304
+11_agustus_frame_000021.jpg,11_agustus,89,160,142,71,53,71,53,5041,2809
+11_agustus_frame_000025.jpg,11_agustus,90,161,159,71,69,71,69,5041,4761

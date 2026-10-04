@@ -1,0 +1,15 @@
+filename,group_id,gt_count,pred_count_A,pred_count_B,err_A,err_B,abs_err_A,abs_err_B,sq_err_A,sq_err_B
+5_agustus_frame_000001_jpg.rf.zUi1W5vijbAz9UHipZko.jpg,5_agustus,76,300,281,224,205,224,205,50176,42025
+5_agustus_frame_000005_jpg.rf.wr6tVCnUwkiEhTvNHP0s.jpg,5_agustus,91,300,287,209,196,209,196,43681,38416
+5_agustus_frame_000009_jpg.rf.0EklvFOgVA0BaSJiOO3F.jpg,5_agustus,75,300,291,225,216,225,216,50625,46656
+5_agustus_frame_000013_jpg.rf.jJgFi4rTg6xIQgsZdNLh.jpg,5_agustus,83,300,288,217,205,217,205,47089,42025
+5_agustus_frame_000017_jpg.rf.lNpZDL2fZBkdEuf8E9EV.jpg,5_agustus,65,300,279,235,214,235,214,55225,45796
+5_agustus_frame_000021_jpg.rf.Bw39aPe0JXrC4Cg6Plc3.jpg,5_agustus,81,300,281,219,200,219,200,47961,40000
+5_agustus_frame_000025_jpg.rf.3ifZKDa6NkOf4bepTwRI.jpg,5_agustus,67,300,268,233,201,233,201,54289,40401
+5_agustus_frame_000029_jpg.rf.uZPr6dXuGxLxN3s7jnSh.jpg,5_agustus,99,300,276,201,177,201,177,40401,31329
+5_agustus_frame_000033_jpg.rf.UGCOrv3cKSRSIdcr3Vb6.jpg,5_agustus,82,300,292,218,210,218,210,47524,44100
+5_agustus_frame_000037_jpg.rf.XqdW9YlWAQIQUVeOcohB.jpg,5_agustus,109,300,299,191,190,191,190,36481,36100
+5_agustus_frame_000041_jpg.rf.pcPimcuRlkszsvBzTeLM.jpg,5_agustus,85,300,291,215,206,215,206,46225,42436
+5_agustus_frame_000045_jpg.rf.taQAmrXt6SHh8HQQJrOX.jpg,5_agustus,103,300,290,197,187,197,187,38809,34969
+5_agustus_frame_000049_jpg.rf.Na53tnRwCEoatqEmmfAG.jpg,5_agustus,108,300,286,192,178,192,178,36864,31684
+5_agustus_frame_000053_jpg.rf.w5lqBLzW4G1qwJ9g7dQU.jpg,5_agustus,117,300,293,183,176,183,176,33489,30976

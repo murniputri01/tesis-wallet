@@ -1,0 +1,2 @@
+filename,group_id,gt_count,pred_count_A,pred_count_B,err_A,err_B,abs_err_A,abs_err_B,sq_err_A,sq_err_B
+7_agustus_frame_000021.jpg,7_agustus,82,87,87,5,5,5,5,25,25

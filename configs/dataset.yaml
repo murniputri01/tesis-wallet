@@ -1,0 +1,18 @@
+# YOLO Dataset Configuration File
+# Penelitian: Modifikasi Zero-DCE Berbasis CBAM untuk Enhancement Citra Low-Light CCTV Inframerah pada Kandang Burung Walet
+# Tahap 1: Persiapan dan Pengolahan Data
+
+# Path dasar relatif terhadap lokasi eksekusi (atau relatif dari folder root project)
+path: ../data/splits
+
+# Sub-direktori citra untuk train, val, dan test
+train: train/images
+val: val/images
+test: test/images
+
+# Jumlah kelas objek
+nc: 1
+
+# Pemetaan ID kelas ke nama objek
+names:
+  0: walet

@@ -1,0 +1,9 @@
+filename,group_id,gt_count,pred_count_A,pred_count_B,err_A,err_B,abs_err_A,abs_err_B,sq_err_A,sq_err_B
+22_september_frame_000001.jpg,22_september,104,203,197,99,93,99,93,9801,8649
+22_september_frame_000004.jpg,22_september,99,190,190,91,91,91,91,8281,8281
+22_september_frame_000007.jpg,22_september,109,202,196,93,87,93,87,8649,7569
+22_september_frame_000010.jpg,22_september,102,196,191,94,89,94,89,8836,7921
+22_september_frame_000013.jpg,22_september,101,199,189,98,88,98,88,9604,7744
+22_september_frame_000016.jpg,22_september,102,207,195,105,93,105,93,11025,8649
+22_september_frame_000019.jpg,22_september,103,207,193,104,90,104,90,10816,8100
+22_september_frame_000022.jpg,22_september,104,194,191,90,87,90,87,8100,7569

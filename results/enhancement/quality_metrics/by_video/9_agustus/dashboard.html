@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualisasi Evaluasi Kualitas Citra - Swallow Detection</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-primary: #38bdf8;
+            --accent-success: #34d399;
+            --accent-danger: #f87171;
+            --border-color: #334155;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 30px;
+        }
+        .header { text-align: center; margin-bottom: 24px; }
+        .header h1 { font-size: 2.2rem; margin-bottom: 8px; }
+        .header p { color: var(--text-sub); font-size: 1.05rem; margin-top: 0; }
+        .video-filter-bar {
+            max-width: 900px; margin: 0 auto 24px auto; padding: 14px 20px;
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 12px; display: flex; align-items: center; justify-content: space-between;
+            gap: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .video-filter-bar label { font-size: 1rem; color: var(--accent-primary); }
+        .video-filter-bar select {
+            background: #0f172a; color: #f8fafc; border: 1px solid var(--border-color);
+            padding: 8px 16px; border-radius: 8px; font-size: 0.95rem; font-weight: 600;
+            outline: none; cursor: pointer; min-width: 250px;
+        }
+        .video-filter-bar select:focus { border-color: var(--accent-primary); }
+        .video-count-badge {
+            background: rgba(56, 189, 248, 0.15); color: var(--accent-primary);
+            padding: 6px 14px; border-radius: 20px; font-size: 0.88rem; font-weight: 600;
+        }
+        .verdict {
+            max-width: 900px; margin: 0 auto 32px auto; padding: 16px 20px;
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-primary); border-radius: 10px;
+            color: var(--text-sub); font-size: 0.95rem; line-height: 1.6;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px; margin-bottom: 40px;
+        }
+        .card {
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+        .card h3 {
+            margin-top: 0; font-size: 1.15rem; color: var(--accent-primary);
+            border-bottom: 1px solid var(--border-color); padding-bottom: 12px;
+        }
+        .metric-val { font-size: 1.8rem; font-weight: 700; margin: 15px 0 5px 0; }
+        .metric-val .unit { font-size: 0.95rem; color: var(--text-sub); font-weight: 400; }
+        .metric-change { font-size: 0.92rem; font-weight: 600; }
+        .desc { font-size: 0.85rem; color: var(--text-sub); margin-top: 10px; line-height: 1.5; }
+        .positive { color: var(--accent-success); }
+        .negative { color: var(--accent-danger); }
+        .cell-better { color: var(--accent-success); font-weight: 600; }
+        .cell-worse { color: var(--accent-danger); font-weight: 600; }
+        canvas { max-height: 240px; margin-top: 12px; }
+        table {
+            width: 100%; border-collapse: collapse; margin-top: 20px;
+            background: var(--card-bg); border-radius: 12px; overflow: hidden;
+            font-size: 0.88rem;
+        }
+        th, td {
+            padding: 10px 14px; text-align: left;
+            border-bottom: 1px solid var(--border-color); white-space: nowrap;
+        }
+        th { background-color: #0f172a; color: var(--accent-primary); font-weight: 600; }
+        tr:hover { background-color: rgba(255, 255, 255, 0.03); }
+        .footnote { color: var(--text-sub); font-size: 0.85rem; line-height: 1.6; max-width: 900px; margin: 0 auto; }
+        .v-badge {
+            display: inline-block; background: #334155; color: #f8fafc;
+            font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>&#128202; Dashboard Visualisasi Kualitas Citra</h1>
+        <p>Evaluasi No-Reference: Entropy, BRISQUE-like, Koefisien Variasi Iluminasi, dan Kontras Objek Weber</p>
+    </div>
+
+    
+    <div class="video-filter-bar">
+        <label for="videoSelect"><strong>&#127916; Filter Video:</strong></label>
+        <select id="videoSelect" onchange="onVideoChange(this.value)">
+            <option value="ALL">Semua Video (Gabungan)</option><option value="9_agustus">9_agustus (8 frame)</option>
+        </select>
+        <span class="video-count-badge" id="videoCountBadge">8 frame (1 video)</span>
+    </div>
+    
+
+    <div class="verdict" id="verdictBox">
+        Memuat status evaluasi...
+    </div>
+
+    <div class="grid">
+
+        <div class="card" id="card_entropy">
+            <h3>1. Entropy</h3>
+            <div class="metric-val" id="val_entropy">- <span class="unit">bits</span></div>
+            <div class="metric-change" id="change_entropy">Memuat data...</div>
+            <p class="desc">Lebih tinggi = informasi/tekstur lebih kaya. Shannon entropy distribusi tingkat keabuan citra.</p>
+            <canvas id="chart_entropy"></canvas>
+        </div>
+
+        <div class="card" id="card_brisque">
+            <h3>2. BRISQUE-like (proxy)</h3>
+            <div class="metric-val" id="val_brisque">- <span class="unit">skor 0-100</span></div>
+            <div class="metric-change" id="change_brisque">Memuat data...</div>
+            <p class="desc">Lebih rendah = kualitas spasial lebih alami. Skor spasial no-reference berbasis fitur MSCN/AGGD. Proxy heuristik, bukan BRISQUE standar dengan model SVR terlatih.</p>
+            <canvas id="chart_brisque"></canvas>
+        </div>
+
+        <div class="card" id="card_cv_illumination">
+            <h3>3. Koef. Variasi Iluminasi</h3>
+            <div class="metric-val" id="val_cv_illumination">- <span class="unit">rasio Std/Mean</span></div>
+            <div class="metric-change" id="change_cv_illumination">Memuat data...</div>
+            <p class="desc">Lebih rendah = pencahayaan lebih seragam. CV = Std / Mean Brightness. Nilainya ikut turun bila kecerahan rata-rata naik, jadi harus dibaca bersama kontras, bukan sendirian.</p>
+            <canvas id="chart_cv_illumination"></canvas>
+        </div>
+
+        <div class="card" id="card_object_weber">
+            <h3>4. Kontras Objek (Weber)</h3>
+            <div class="metric-val" id="val_object_weber">- <span class="unit">rasio</span></div>
+            <div class="metric-change" id="change_object_weber">Memuat data...</div>
+            <p class="desc">Lebih tinggi = walet lebih kontras dari latar. Kontras Weber walet terhadap latar lokal. Kriteria utama kualitas enhancement pada proyek ini karena tidak bias terhadap kecerahan global.</p>
+            <canvas id="chart_object_weber"></canvas>
+        </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 40px;">
+        <h3>&#128203; Detail Metrik Per-Frame Citra</h3>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr><th>Video</th><th>Filename</th><th>Orig Entropy</th><th>CBAM Entropy</th><th>Orig BRISQUE-like (proxy)</th><th>CBAM BRISQUE-like (proxy)</th><th>Orig Koef. Variasi Iluminasi</th><th>CBAM Koef. Variasi Iluminasi</th><th>Orig Kontras Objek (Weber)</th><th>CBAM Kontras Objek (Weber)</th></tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+        <p class="desc">Kolom CBAM berwarna hijau bila frame tersebut membaik, merah bila memburuk.</p>
+    </div>
+
+    <div class="footnote">
+        <p><strong>Catatan metodologis.</strong> Skor BRISQUE pada proyek ini merupakan proxy heuristik
+        berbasis fitur MSCN/AGGD, bukan BRISQUE standar dengan model SVR terlatih pada dataset LIVE.
+        Koefisien Variasi Iluminasi (Std/Mean) ikut mengecil ketika kecerahan rata-rata naik,
+        sehingga penurunannya tidak otomatis berarti kualitas deteksi meningkat dan harus dibaca bersama
+        Kontras Objek Weber.</p>
+    </div>
+
+    <script>
+        const ALL_DATA = [{"video_stem": "9_agustus", "filename": "9_agustus_frame_000001.jpg", "orig_entropy": 7.0538, "cbam_entropy": 6.1063, "orig_brisque": 13.72, "cbam_brisque": 14.75, "orig_cv_illumination": 0.4412, "cbam_cv_illumination": 0.1969, "orig_object_weber": 0.7179, "cbam_object_weber": 0.606}, {"video_stem": "9_agustus", "filename": "9_agustus_frame_000005.jpg", "orig_entropy": 7.0548, "cbam_entropy": 6.1055, "orig_brisque": 13.73, "cbam_brisque": 14.69, "orig_cv_illumination": 0.4414, "cbam_cv_illumination": 0.1973, "orig_object_weber": 0.7193, "cbam_object_weber": 0.6058}, {"video_stem": "9_agustus", "filename": "9_agustus_frame_000009.jpg", "orig_entropy": 7.0571, "cbam_entropy": 6.1059, "orig_brisque": 13.7, "cbam_brisque": 14.65, "orig_cv_illumination": 0.4415, "cbam_cv_illumination": 0.1972, "orig_object_weber": 0.7151, "cbam_object_weber": 0.6054}, {"video_stem": "9_agustus", "filename": "9_agustus_frame_000013.jpg", "orig_entropy": 7.055, "cbam_entropy": 6.1054, "orig_brisque": 13.75, "cbam_brisque": 14.71, "orig_cv_illumination": 0.4412, "cbam_cv_illumination": 0.1969, "orig_object_weber": 0.7152, "cbam_object_weber": 0.5993}, {"video_stem": "9_agustus", "filename": "9_agustus_frame_000017.jpg", "orig_entropy": 7.0522, "cbam_entropy": 6.1043, "orig_brisque": 13.77, "cbam_brisque": 14.62, "orig_cv_illumination": 0.4411, "cbam_cv_illumination": 0.197, "orig_object_weber": 0.7199, "cbam_object_weber": 0.6065}, {"video_stem": "9_agustus", "filename": "9_agustus_frame_000021.jpg", "orig_entropy": 7.0545, "cbam_entropy": 6.1046, "orig_brisque": 13.73, "cbam_brisque": 14.71, "orig_cv_illumination": 0.4411, "cbam_cv_illumination": 0.1968, "orig_object_weber": 0.7206, "cbam_object_weber": 0.6076}, {"video_stem": "9_agustus", "filename": "9_agustus_frame_000025.jpg", "orig_entropy": 7.0541, "cbam_entropy": 6.105, "orig_brisque": 13.81, "cbam_brisque": 14.79, "orig_cv_illumination": 0.4411, "cbam_cv_illumination": 0.1968, "orig_object_weber": 0.7122, "cbam_object_weber": 0.6062}, {"video_stem": "9_agustus", "filename": "9_agustus_frame_000029.jpg", "orig_entropy": 7.0544, "cbam_entropy": 6.1064, "orig_brisque": 13.78, "cbam_brisque": 14.62, "orig_cv_illumination": 0.4413, "cbam_cv_illumination": 0.1969, "orig_object_weber": 0.7206, "cbam_object_weber": 0.6057}];
+        const METRICS_META = [{"key": "entropy", "label": "Entropy", "unit": "bits", "higher_better": true, "decimals": 4, "note": "Lebih tinggi = informasi/tekstur lebih kaya", "desc": "Shannon entropy distribusi tingkat keabuan citra.", "orig_col": "orig_entropy", "cbam_col": "cbam_entropy"}, {"key": "brisque", "label": "BRISQUE-like (proxy)", "unit": "skor 0-100", "higher_better": false, "decimals": 2, "note": "Lebih rendah = kualitas spasial lebih alami", "desc": "Skor spasial no-reference berbasis fitur MSCN/AGGD. Proxy heuristik, bukan BRISQUE standar dengan model SVR terlatih.", "orig_col": "orig_brisque", "cbam_col": "cbam_brisque"}, {"key": "cv_illumination", "label": "Koef. Variasi Iluminasi", "unit": "rasio Std/Mean", "higher_better": false, "decimals": 4, "note": "Lebih rendah = pencahayaan lebih seragam", "desc": "CV = Std / Mean Brightness. Nilainya ikut turun bila kecerahan rata-rata naik, jadi harus dibaca bersama kontras, bukan sendirian.", "orig_col": "orig_cv_illumination", "cbam_col": "cbam_cv_illumination"}, {"key": "object_weber", "label": "Kontras Objek (Weber)", "unit": "rasio", "higher_better": true, "decimals": 4, "note": "Lebih tinggi = walet lebih kontras dari latar", "desc": "Kontras Weber walet terhadap latar lokal. Kriteria utama kualitas enhancement pada proyek ini karena tidak bias terhadap kecerahan global.", "orig_col": "orig_object_weber", "cbam_col": "cbam_object_weber"}];
+        let chartInstances = {};
+
+        const baseOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: '#f8fafc', boxWidth: 12 } },
+                tooltip: { mode: 'index', intersect: false }
+            },
+            scales: {
+                x: { ticks: { color: '#94a3b8', maxRotation: 60, minRotation: 45, font: { size: 9 } },
+                      grid: { color: '#334155' } },
+                y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+            }
+        };
+
+        function fmtNum(val, decimals) {
+            if (val === null || val === undefined || isNaN(val)) return 'n/a';
+            return val.toFixed(decimals);
+        }
+
+        function fmtPctJS(val) {
+            if (val === null || val === undefined || isNaN(val)) return 'n/a';
+            const sign = val >= 0 ? '+' : '';
+            return sign + val.toFixed(2) + '%';
+        }
+
+        function onVideoChange(selectedVideo) {
+            const filteredData = selectedVideo === 'ALL'
+                ? ALL_DATA
+                : ALL_DATA.filter(d => d.video_stem === selectedVideo);
+
+            const nTotal = filteredData.length;
+            document.getElementById('videoCountBadge').innerText = nTotal + ' frame' + (selectedVideo === 'ALL' ? ' (gabungan)' : '');
+
+            let improvedCount = 0;
+            let metricVerdicts = [];
+
+            METRICS_META.forEach(m => {
+                const origVals = filteredData.map(d => d[m.orig_col]).filter(v => v !== undefined && !isNaN(v));
+                const cbamVals = filteredData.map(d => d[m.cbam_col]).filter(v => v !== undefined && !isNaN(v));
+
+                const origMean = origVals.length ? (origVals.reduce((a, b) => a + b, 0) / origVals.length) : 0;
+                const cbamMean = cbamVals.length ? (cbamVals.reduce((a, b) => a + b, 0) / cbamVals.length) : 0;
+
+                const rawChange = origMean !== 0 ? ((cbamMean - origMean) / origMean * 100.0) : 0;
+                const improvement = m.higher_better ? rawChange : -rawChange;
+                const isBetter = m.higher_better ? (cbamMean > origMean) : (cbamMean < origMean);
+
+                let nImproved = 0;
+                filteredData.forEach(d => {
+                    const o = d[m.orig_col];
+                    const c = d[m.cbam_col];
+                    if (o !== undefined && c !== undefined) {
+                        if (m.higher_better ? (c > o) : (c < o)) nImproved++;
+                    }
+                });
+
+                if (isBetter) improvedCount++;
+                metricVerdicts.push((isBetter ? 'MEMBAIK: ' : 'MEMBURUK: ') + m.label);
+
+                // Update Card
+                const valElem = document.getElementById('val_' + m.key);
+                valElem.innerHTML = fmtNum(cbamMean, m.decimals) + ' <span class="unit">' + m.unit + '</span>';
+
+                const changeElem = document.getElementById('change_' + m.key);
+                const verdictTxt = isBetter ? 'Membaik' : 'Memburuk';
+                const clsName = isBetter ? 'positive' : 'negative';
+                changeElem.className = 'metric-change ' + clsName;
+                changeElem.innerHTML = 'Original: ' + fmtNum(origMean, m.decimals) + ' &middot; ' +
+                    verdictTxt + ' ' + fmtPctJS(improvement) + ' &middot; ' +
+                    nImproved + '/' + nTotal + ' frame membaik';
+
+                // Update Chart
+                const labels = filteredData.map(d => (selectedVideo === 'ALL' ? d.video_stem + '/' : '') + d.filename);
+                const chartId = 'chart_' + m.key;
+
+                if (chartInstances[chartId]) {
+                    chartInstances[chartId].destroy();
+                }
+
+                chartInstances[chartId] = new Chart(document.getElementById(chartId), {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            { label: 'Original', data: origVals, borderColor: '#94a3b8', backgroundColor: '#94a3b8', tension: 0.2, pointRadius: 2.5 },
+                            { label: 'ZERO-DCE+CBAM', data: cbamVals, borderColor: '#38bdf8', backgroundColor: '#38bdf8', tension: 0.2, pointRadius: 2.5 }
+                        ]
+                    },
+                    options: Object.assign({}, baseOptions, {
+                        plugins: Object.assign({}, baseOptions.plugins, {
+                            title: { display: true, text: m.label + ' (' + m.unit + ')', color: '#94a3b8', font: { size: 11 } }
+                        })
+                    })
+                });
+            });
+
+            // Verdict Box Update
+            const verdictBox = document.getElementById('verdictBox');
+            verdictBox.innerHTML = '<strong>' + improvedCount + ' dari ' + METRICS_META.length + ' metrik membaik.</strong> ' +
+                'Nilai persentase memakai konvensi: <em>positif = lebih baik</em>. Jumlah sampel: <strong>' + nTotal + ' frame</strong>.';
+
+            // Table Update
+            const tbody = document.getElementById('tableBody');
+            let rowsHtml = '';
+            filteredData.forEach(d => {
+                let cellsHtml = '';
+                METRICS_META.forEach(m => {
+                    const o = d[m.orig_col];
+                    const c = d[m.cbam_col];
+                    const isB = m.higher_better ? (c > o) : (c < o);
+                    const cls = isB ? 'cell-better' : 'cell-worse';
+                    cellsHtml += '<td>' + fmtNum(o, m.decimals) + '</td><td class="' + cls + '">' + fmtNum(c, m.decimals) + '</td>';
+                });
+                rowsHtml += '<tr><td><span class="v-badge">' + d.video_stem + '</span></td><td><code>' + d.filename + '</code></td>' + cellsHtml + '</tr>';
+            });
+            tbody.innerHTML = rowsHtml;
+        }
+
+        window.onload = function() {
+            onVideoChange('ALL');
+        };
+    </script>
+</body>
+</html>

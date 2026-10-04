@@ -1,0 +1,34 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE & Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary & Scratch files
+scratch/
+
+# Large Model Weights (YOLO / PyTorch binary weights)
+*.pt
+*.pth
+*.onnx
+*.engine
+
+# Local Environment & Logs
+.env
+*.log

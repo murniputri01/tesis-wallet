@@ -1,0 +1,2 @@
+video_stem,filename,orig_mean_brightness,orig_entropy,orig_contrast,orig_cv_illumination,orig_brisque,orig_object_delta_l,orig_object_weber,cbam_mean_brightness,cbam_entropy,cbam_contrast,cbam_cv_illumination,cbam_brisque,cbam_object_delta_l,cbam_object_weber
+27_september,27_september_frame_000001.jpg,39.46,4.5963,49.38,1.2513,12.1,92.18,0.8875,53.48,4.4234,58.22,1.0887,13.87,76.88,0.6991

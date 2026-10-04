@@ -1,0 +1,9 @@
+# YOLO Dataset Configuration - Skenario A (Original Low-Light Image)
+path: c:/MyPrograms/swallow_detection
+train: data/splits/train/images
+val: data/splits/val/images
+test: data/splits/test/images
+
+nc: 1
+names:
+  0: walet

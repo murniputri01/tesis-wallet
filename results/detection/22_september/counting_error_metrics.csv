@@ -1,0 +1,3 @@
+Skenario,Total_Citra,Total_GT_Object,Total_Pred_Object,MAE,RMSE
+Skenario A (Original Low-Light),8,824,1598,96.75,96.8969
+Skenario B (Zero-DCE + CBAM Usulan),8,824,1542,89.75,89.7789

@@ -1,0 +1,9 @@
+# YOLO Master Dataset Configuration - Proposed Method (Zero-DCE + CBAM Enhanced)
+path: c:/MyPrograms/swallow_detection
+train: data/enhanced/master_dataset/train/images
+val: data/enhanced/master_dataset/val/images
+test: data/enhanced/master_dataset/test/images
+
+nc: 1
+names:
+  0: walet

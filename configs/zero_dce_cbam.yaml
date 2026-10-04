@@ -1,0 +1,46 @@
+# Configuration File for Zero-DCE + CBAM Modifikasi Training
+# Skenario C: Citra Original -> Zero-DCE + CBAM Modifikasi -> Enhanced Image
+
+dataset:
+  train_dir: data/splits/train/images
+  val_dir: data/splits/val/images
+  # Resolusi training (Zero-DCE asli melatih pada 256x256).
+  # Model fully-convolutional, inferensi tetap bisa pada resolusi penuh.
+  image_size: [256, 256]
+  batch_size: 4
+  num_workers: 0
+
+model:
+  name: zero_dce_cbam
+  # Jumlah iterasi kurva LE. Zero-DCE asli memakai 8 untuk citra under-exposed berat.
+  # Frame CCTV walet di sini sudah semi-terang (mean ~91/255), sehingga 8 iterasi
+  # menghasilkan lift global berlebihan: latar (papan sirip) terdorong ke highlight
+  # dan kontras walet terhadap latar justru turun. Dikurangi ke 4.
+  n_iters: 4
+  nf: 32
+  dark_threshold: null
+
+training:
+  epochs: 600
+  lr: 0.0001
+  weight_decay: 0.0001
+  seed: 42
+  checkpoint_dir: checkpoints/zero_dce_cbam
+  save_frequency: 100
+  # Gradient clipping mengikuti implementasi resmi Zero-DCE (max_norm = 0.1).
+  # Set ke 0 atau null untuk menonaktifkan.
+  grad_clip_norm: 0.1
+
+loss_weights:
+  lambda_spa: 10.0
+  lambda_exp: 10.0
+  lambda_col: 5.0
+  lambda_tvA: 200.0
+  # Target exposure E. Nilai 0.55 menarik rerata patch ke arah terang sehingga
+  # latar mendekati saturasi dan walet ikut terangkat (kontras objek menurun).
+  # Diturunkan ke 0.45 agar pencerahan lebih konservatif dan highlight tidak tergerus.
+  target_exposure: 0.45
+  patch_size: 16
+  # USULAN PENELITIAN (Skenario C): adaptive pixel-wise dark weighting pada exposure loss.
+  use_pixel_weighting: true
+  gamma: 1.0

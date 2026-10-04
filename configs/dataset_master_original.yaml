@@ -1,0 +1,9 @@
+# YOLO Master Dataset Configuration - Baseline Original (Low-Light)
+path: c:/MyPrograms/swallow_detection
+train: data/master_dataset/train/images
+val: data/master_dataset/val/images
+test: data/master_dataset/test/images
+
+nc: 1
+names:
+  0: walet

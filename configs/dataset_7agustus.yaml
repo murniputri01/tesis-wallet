@@ -1,0 +1,13 @@
+# YOLO Dataset Configuration - Dataset Bersih 7_agustus (Anotasi Manual Roboflow)
+# Dibangun oleh: scripts/dataset/build_clean_dataset.py --sources 7_agustus --min_objects 5
+# Sifat dataset: bebas duplikasi frame, bebas leakage antar split, hanya memakai
+# anotasi manual Roboflow (rata-rata ~74 objek walet per citra).
+path: c:/MyPrograms/swallow_detection/data/splits_7agustus
+
+train: train/images
+val: val/images
+test: test/images
+
+nc: 1
+names:
+  0: walet

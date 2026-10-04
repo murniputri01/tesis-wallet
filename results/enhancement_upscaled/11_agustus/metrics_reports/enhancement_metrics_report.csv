@@ -1,0 +1,8 @@
+video_stem,filename,orig_mean_brightness,orig_entropy,orig_contrast,orig_cv_illumination,orig_brisque,orig_object_delta_l,orig_object_weber,cbam_mean_brightness,cbam_entropy,cbam_contrast,cbam_cv_illumination,cbam_brisque,cbam_object_delta_l,cbam_object_weber
+11_agustus,11_agustus_frame_000001.jpg,93.99,7.0353,36.27,0.3859,13.92,78.05,0.652,117.9,6.5295,24.47,0.2076,14.13,58.1,0.4618
+11_agustus,11_agustus_frame_000005.jpg,94.03,7.0346,36.24,0.3855,13.94,77.89,0.6512,117.94,6.5286,24.43,0.2072,14.15,58.16,0.4627
+11_agustus,11_agustus_frame_000009.jpg,94.02,7.0367,36.28,0.3859,13.91,77.62,0.651,117.93,6.53,24.48,0.2076,14.15,58.08,0.4625
+11_agustus,11_agustus_frame_000013.jpg,94.04,7.0338,36.26,0.3855,13.91,76.74,0.645,117.95,6.5281,24.45,0.2073,14.13,57.99,0.4612
+11_agustus,11_agustus_frame_000017.jpg,94.03,7.033,36.22,0.3852,13.93,76.88,0.645,117.94,6.5274,24.43,0.2071,14.13,57.97,0.461
+11_agustus,11_agustus_frame_000021.jpg,94.04,7.0345,36.22,0.3852,13.96,76.86,0.6461,117.94,6.5278,24.41,0.207,14.15,58.15,0.4627
+11_agustus,11_agustus_frame_000025.jpg,94.06,7.0339,36.21,0.385,13.92,76.56,0.6441,117.96,6.5263,24.4,0.2069,14.15,57.83,0.4596

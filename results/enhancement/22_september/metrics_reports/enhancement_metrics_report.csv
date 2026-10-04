@@ -1,0 +1,9 @@
+video_stem,filename,orig_mean_brightness,orig_entropy,orig_contrast,orig_cv_illumination,orig_brisque,orig_object_delta_l,orig_object_weber,cbam_mean_brightness,cbam_entropy,cbam_contrast,cbam_cv_illumination,cbam_brisque,cbam_object_delta_l,cbam_object_weber
+22_september,22_september_frame_000001.jpg,82.02,7.3209,44.45,0.5419,13.04,118.43,0.9311,109.88,6.6801,32.22,0.2933,17.73,114.13,0.9157
+22_september,22_september_frame_000004.jpg,82.04,7.3219,44.45,0.5419,13.04,118.44,0.9315,109.88,6.6791,32.22,0.2933,17.73,114.1,0.9165
+22_september,22_september_frame_000007.jpg,82.05,7.3215,44.44,0.5416,12.99,118.29,0.931,109.87,6.6797,32.24,0.2934,17.67,114.05,0.9156
+22_september,22_september_frame_000010.jpg,82.07,7.3212,44.45,0.5416,13.06,118.43,0.9312,109.89,6.678,32.23,0.2933,17.77,114.02,0.9158
+22_september,22_september_frame_000013.jpg,82.08,7.3224,44.44,0.5414,13.04,118.37,0.9307,109.9,6.6815,32.22,0.2932,17.7,114.0,0.916
+22_september,22_september_frame_000016.jpg,82.05,7.3213,44.4,0.5411,13.04,117.49,0.9271,109.89,6.679,32.19,0.2929,17.73,113.9,0.9153
+22_september,22_september_frame_000019.jpg,82.05,7.3194,44.41,0.5412,13.04,118.03,0.9301,109.89,6.6772,32.22,0.2932,17.68,113.93,0.9163
+22_september,22_september_frame_000022.jpg,82.06,7.3205,44.41,0.5413,13.05,117.42,0.9274,109.88,6.6793,32.21,0.2931,17.69,113.36,0.9128

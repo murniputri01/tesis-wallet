@@ -1,0 +1,9 @@
+# YOLO Dataset Configuration - Skenario C (Zero-DCE + CBAM Proposed Method)
+path: c:/MyPrograms/swallow_detection
+train: data/enhanced/zero_dce_cbam/train/images
+val: data/enhanced/zero_dce_cbam/val/images
+test: data/enhanced/zero_dce_cbam/test/images
+
+nc: 1
+names:
+  0: walet

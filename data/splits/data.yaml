@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 2
+names: ['Walet', 'swallow bird']
+
+roboflow:
+  workspace: ashiday-suan-asrul
+  project: swallow-detection-y9af1
+  version: dataset
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/ashiday-suan-asrul/swallow-detection-y9af1/dataset/dataset
